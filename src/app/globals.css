@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+body {
+  @apply bg-white text-black;
+}
+.container {
+  @apply max-w-4xl mx-auto px-4;
+}
+.card {
+  @apply rounded-2xl border border-black/10 shadow-sm p-4;
+}
+.btn {
+  @apply border border-black px-4 py-2 rounded-xl hover:bg-black hover:text-white transition;
+}
+.input {
+  @apply border border-black rounded-xl px-3 py-2 w-full;
+}
+textarea.input {
+  @apply min-h-[100px];
+}
+pre.code {
+  @apply bg-black text-white p-4 rounded-xl overflow-auto;
+}
