@@ -2,9 +2,9 @@
 
 ## Quickstart
 ```bash
-npm install
-npx playwright install
-npm run dev
+npm install / yarn install
+npx playwright install 
+npm run dev / yar dev
 ```
 
 ## How it works
