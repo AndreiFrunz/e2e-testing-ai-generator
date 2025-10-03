@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# generated tests
+/src/generated
+
 # next.js
 /.next/
 /out/
