@@ -3,58 +3,70 @@
  * Reads env: AZURE_AI_API_KEY, AZURE_AI_AGENT_ID, AZURE_AI_ENDPOINT
  * Exposes askAzureAgent(url, scenario) -> { code, meta }
  */
-export async function askAzureAgent(url, scenario) {
-  const apiKey = process.env.AZURE_AI_API_KEY;
-  const agentId = process.env.AZURE_AI_AGENT_ID;
-  const endpoint = process.env.AZURE_AI_ENDPOINT;
 
-  if (!apiKey || !agentId || !endpoint) {
-    throw new Error('Azure credentials are missing. Check .env.');
+import { DefaultAzureCredential } from '@azure/identity';
+import {
+  AgentsClient,
+  RunStreamEvent,
+  ErrorEvent,
+  DoneEvent,
+} from '@azure/ai-agents';
+
+const projectEndpoint = process.env.AZURE_AI_ENDPOINT;
+const client = new AgentsClient(projectEndpoint, new DefaultAzureCredential());
+const agentId = process.env.AZURE_AI_AGENT_ID;
+
+export async function askAzureAgent(messages, threadId) {
+  const thread = threadId ? { id: threadId } : await client.threads.create();
+
+  const streamEventMessages = await client.runs
+    .create(thread.id, agentId, {
+      additionalMessages: messages,
+    })
+    .stream();
+
+  let statusMessage = '';
+
+  for await (const eventMessage of streamEventMessages) {
+    switch (eventMessage.event) {
+      case RunStreamEvent.ThreadRunCreated:
+        console.log(`ThreadRun status: ${eventMessage.data.status}`);
+        statusMessage = 'queued';
+        break;
+      case RunStreamEvent.ThreadRunCompleted:
+        statusMessage = 'completed';
+        console.log('Thread Run Completed');
+        break;
+      case ErrorEvent.Error:
+        statusMessage = 'error';
+        console.log(`An error occurred. Data ${eventMessage.data}`);
+        break;
+      case DoneEvent.Done:
+        statusMessage = 'done';
+        console.log('Stream completed.');
+        break;
+    }
   }
 
-  // This is a generic shape; adapt to your actual Azure AI Foundry Agents API.
-  const payload = {
-    agent_id: agentId,
-    input: {
-      url,
-      scenario,
-    },
-  };
+  console.log('>>> statusMessage:', statusMessage);
 
-  try {
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify(payload),
-      // Ensure Node runtime fetch
-      cache: 'no-store',
+  const messagesIterator = await client.messages.list(thread.id);
+  if (statusMessage === 'done') {
+    const allMessages = [];
+    for await (const m of messagesIterator) {
+      allMessages.push(m);
+    }
+    console.log('>>> info:', {
+      allMessages: allMessages,
+      threadId: thread.id,
+      agentMessage: allMessages[0].content,
     });
-    console.log('>>> payload:', payload);
-    console.log('>>> res:', res);
-
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Azure request failed: ${res.status} ${text}`);
-    }
-    const data = await res.json();
-
-    // Expect `data.code` to be Playwright JS test code.
-    // If your agent returns a different shape, map it here.
-    if (!data.code) {
-      // Fallback: build a very simple test from agent summary if needed
-      const code = `import { test, expect } from '@playwright/test';
-test('Generated test for ${url}', async ({ page }) => {
-  await page.goto('${url}');
-  await expect(page).toHaveURL(/.*/);
-});`;
-      return { code, meta: data };
-    }
-    return { code: data.code, meta: data };
-  } catch (err) {
-    // Bubble up for the API route to handle.
-    throw err;
+    return {
+      allMessages: allMessages,
+      threadId: thread.id,
+      agentMessage: allMessages[0].content,
+    };
+  } else {
+    throw 'Something went wrong! Please try again!';
   }
 }

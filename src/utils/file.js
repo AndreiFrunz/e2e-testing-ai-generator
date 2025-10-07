@@ -15,3 +15,20 @@ export function savePlaywrightTest(code) {
   fs.writeFileSync(filePath, code, 'utf-8');
   return filePath;
 }
+
+export function extractPlaywrightFile(inputText) {
+  const regex = /```javascript([\s\S]*?)```/g;
+  let match;
+  let combinedCode = '';
+
+  while ((match = regex.exec(inputText)) !== null) {
+    combinedCode += match[1].trim() + '\n\n';
+  }
+
+  const finalCode = `import { test, expect } from '@playwright/test';
+
+${combinedCode.trim()}
+`;
+
+  return finalCode;
+}
