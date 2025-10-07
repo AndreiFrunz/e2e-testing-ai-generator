@@ -32,26 +32,26 @@ export default function Chat() {
 
     try {
       console.log('>>> newMessage:', newMessage);
-      // const res = await fetch('/api/generate', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     messages: [
-      //       {
-      //         role: 'user',
-      //         content: newMessage,
-      //       },
-      //     ],
-      //     threadId,
-      //     mode,
-      //     url,
-      //   }),
-      // });
-      const res = await fetch('/api/autogen', {
+      const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task: newMessage }),
+        body: JSON.stringify({
+          messages: [
+            {
+              role: 'user',
+              content: newMessage,
+            },
+          ],
+          threadId,
+          mode,
+          url,
+        }),
       });
+      // const res = await fetch('/api/autogen', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ task: newMessage }),
+      // });
       const data = await res.json();
       console.log('>>>> data:', data);
       if (!res.ok || !data.ok) {
