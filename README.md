@@ -10,14 +10,14 @@ npm run dev / yar dev
 ## Requirements:
 1. Create a file in your project root  .env
 2. .env content file has to have this key:
-   AZURE_AI_API_KEY=<your-API-KEY>
-   AZURE_AI_AGENT_ID=<your-AGENT_ID>
-   AZURE_AI_ENDPOINT=<your-API-endpoint>
+   AZURE_AI_API_KEY=<your_api_key>
+   AZURE_AI_AGENT_ID=<the-main-ai-agent-id>
+   AZURE_AI_ENDPOINT=<your-azure-ai-endpoint>
+   AZURE_AI_MODEL_DEPLOYMENT=gpt-4o
+3. You have to login your device to azure portal. 
+   For this you have to install Azure CLI on your device.
+   Follow this steps: https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli-interactively?view=azure-cli-latest
 
-   AZURE_OPENAI_ENDPOINT=<your-API-endpoint>
-   AZURE_OPENAI_KEY=<your-API-KEY>
-   AZURE_OPENAI_DEPLOYMENT=<your-deployment-name>
-   AZURE_OPENAI_API_VERSION=2024-02-01-preview
 
 ## How it works
 1. Enter a URL + scenario in the chat and submit.
