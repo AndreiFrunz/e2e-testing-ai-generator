@@ -11,6 +11,8 @@
     "postinstall": "npx playwright install --with-deps"
   },
   "dependencies": {
+    "@azure/ai-agents": "^1.1.0",
+    "@azure/identity": "^4.12.0",
     "@reduxjs/toolkit": "2.2.3",
     "autoprefixer": "10.4.20",
     "axios": "^1.12.2",
