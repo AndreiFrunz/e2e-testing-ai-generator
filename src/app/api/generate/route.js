@@ -31,12 +31,7 @@ export async function POST(req) {
       code = generateMockPlaywrightTest(url, scenario || '');
     }
 
-    if (code) {
-      filePath = savePlaywrightTest(code);
-
-      // Execute Playwright tests
-      resultPlayright = await runPlaywrightOnFile(filePath);
-    }
+    filePath = code ? savePlaywrightTest(code) : '';
 
     return NextResponse.json(
       { ok: true, code, filePath, resultPlayright, newThreadId, agentResponse },

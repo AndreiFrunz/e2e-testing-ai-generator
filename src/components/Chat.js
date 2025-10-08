@@ -32,26 +32,30 @@ export default function Chat() {
 
     try {
       console.log('>>> newMessage:', newMessage);
-      const res = await fetch('/api/generate', {
+      // const res = await fetch('/api/generate', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     messages: [
+      //       {
+      //         role: 'user',
+      //         content: newMessage,
+      //       },
+      //     ],
+      //     threadId,
+      //     mode,
+      //     url,
+      //   }),
+      // });
+      const res = await fetch('/api/autogen', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [
-            {
-              role: 'user',
-              content: newMessage,
-            },
-          ],
-          threadId,
-          mode,
-          url,
+          task: `Generate Playwright tests for ${url}\nScenario: ${
+            scenario || '(none)'
+          }`,
         }),
       });
-      // const res = await fetch('/api/autogen', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ task: newMessage }),
-      // });
       const data = await res.json();
       console.log('>>>> data:', data);
       if (!res.ok || !data.ok) {
@@ -73,7 +77,6 @@ export default function Chat() {
           setOutput({
             code: data?.code,
             filePath: data?.filePath,
-            results: data?.results,
           })
         );
       }
@@ -133,9 +136,9 @@ export default function Chat() {
           <button className='btn' type='submit'>
             {/* Generate & Run */} Generate
           </button>
-          <span className='text-sm opacity-70'>
+          {/* <span className='text-sm opacity-70'>
             Mode: <strong>{mode}</strong> (toggle on the page)
-          </span>
+          </span> */}
         </div>
       </form>
     </div>
