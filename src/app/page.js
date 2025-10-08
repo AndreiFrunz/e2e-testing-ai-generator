@@ -37,7 +37,7 @@ export default function Page() {
             Playwright test using Azure AI Foundry (or mock), save it, execute
             it, and show both the code and the results here.
           </p>
-          <ModeToggle />
+          {/* <ModeToggle /> */}
         </section>
 
         <section>

@@ -20,9 +20,15 @@ const testSlice = createSlice({
       state.mode = action.payload;
     },
     setOutput: (state, action) => {
-      state.code = action.payload.code || '';
-      state.filePath = action.payload.filePath || '';
-      state.results = action.payload.results || null;
+      if (action.payload.code) {
+        state.code = action.payload.code;
+      }
+      if (action.payload.filePath) {
+        state.filePath = action.payload.filePath;
+      }
+      if (action.payload.results) {
+        state.results = action.payload.results;
+      }
     },
     resetOutput: (state) => {
       state.code = '';
