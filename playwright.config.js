@@ -3,7 +3,7 @@ const config = {
   testDir: './src/generated',
   reporter: [['list'], ['json']],
   use: {
-    headless: true,
+    headless: false,
   },
 };
 export default config;

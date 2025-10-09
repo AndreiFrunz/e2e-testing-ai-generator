@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "echo \"(lint disabled for brevity)\"",
-    "test:e2e": "npx playwright test",
+    "test": "npx playwright test",
     "postinstall": "npx playwright install --with-deps"
   },
   "dependencies": {
