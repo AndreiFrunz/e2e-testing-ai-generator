@@ -25,9 +25,6 @@ export function extractPlaywrightFile(inputText) {
     combinedCode += match[1].trim() + '\n\n';
   }
 
-  //   const finalCode = `import { test, expect } from '@playwright/test';
-  // ${combinedCode.trim()}
-  // `;
   const finalCode = `
 ${combinedCode.trim()}
 `;
