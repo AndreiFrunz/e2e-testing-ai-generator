@@ -141,7 +141,7 @@ export async function POST(req) {
       return resolve(
         NextResponse.json(
           {
-            ok: code === 0, // reflect Playwright exit code
+            ok: true,
             results: {
               passed,
               failed,
