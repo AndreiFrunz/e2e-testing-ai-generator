@@ -3,7 +3,7 @@ import path from 'path';
 import { NextResponse } from 'next/server';
 import { extractPlaywrightFile, savePlaywrightTest } from '@/utils/file';
 
-const backendPath = path.join(process.cwd(), '..', 'autogen', 'main.py');
+const backendPath = path.join(process.cwd(), '..', 'autogen-project', 'main.py');
 
 export async function POST(req) {
   const { task } = await req.json();
