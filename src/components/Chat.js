@@ -31,7 +31,7 @@ export default function Chat() {
     dispatch(setLoading(true));
 
     try {
-      console.log('>>> newMessage:', newMessage);
+      // console.log('>>> newMessage:', newMessage);
       // const res = await fetch('/api/generate', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
@@ -57,7 +57,7 @@ export default function Chat() {
         }),
       });
       const data = await res.json();
-      console.log('>>>> data:', data);
+      // console.log('>>>> data:', data);
       if (!res.ok || !data.ok) {
         dispatch(
           addMessage({
