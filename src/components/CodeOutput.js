@@ -24,8 +24,8 @@ export default function CodeOutput() {
         })
       );
     }
-    // console.log('>>> filePath:', filePath);
-    // console.log('>>>> resultPlayright:', data);
+    console.log('>>> filePath:', filePath);
+    console.log('>>>> resultPlayright:', data);
     setLoading(false);
   };
 

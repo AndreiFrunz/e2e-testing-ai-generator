@@ -8,6 +8,7 @@ export default function Chat() {
   const messages = useSelector((s) => s.chat.messages);
   const threadId = useSelector((s) => s.chat.threadId);
   const mode = useSelector((s) => s.test.mode);
+  const loading = useSelector((s) => s.test.loading);
 
   const [url, setUrl] = useState('');
   const [scenario, setScenario] = useState('');
@@ -25,12 +26,22 @@ export default function Chat() {
     dispatch(
       addMessage({
         role: 'user',
-        content: newMessage,
+        content: `Generate Playwright tests for ${url}\nScenario: ${
+          scenario || '(none)'
+        }`,
       })
     );
+    /// for AiFoundry
+    // dispatch(
+    //   addMessage({
+    //     role: 'user',
+    //     content: newMessage,
+    //   })
+    // );
     dispatch(setLoading(true));
 
     try {
+      /// for AiFoundry
       // console.log('>>> newMessage:', newMessage);
       // const res = await fetch('/api/generate', {
       //   method: 'POST',
@@ -47,6 +58,12 @@ export default function Chat() {
       //     url,
       //   }),
       // });
+      console.log(
+        '>>> newMessage:',
+        `Generate Playwright tests for ${url}\nScenario: ${
+          scenario || '(none)'
+        }`
+      );
       const res = await fetch('/api/autogen', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -56,8 +73,9 @@ export default function Chat() {
           }`,
         }),
       });
+
       const data = await res.json();
-      // console.log('>>>> data:', data);
+      console.log('>>>> data:', data);
       if (!res.ok || !data.ok) {
         dispatch(
           addMessage({
@@ -93,54 +111,58 @@ export default function Chat() {
   };
 
   return (
-    <div className='card space-y-4'>
-      <div className='space-y-2 max-h-72 overflow-auto'>
-        {messages.map((m) => (
-          <div
-            key={m.id}
-            className={`w-full flex ${
-              m.role === 'user' ? 'justify-end' : 'justify-start'
-            }`}
-          >
+    <>
+      <div className='card space-y-4'>
+        <div className='space-y-2 max-h-72 overflow-auto'>
+          {messages.map((m) => (
             <div
-              className={`max-w-[80%] px-3 py-2 rounded-2xl border ${
-                m.role === 'user'
-                  ? 'bg-black text-white'
-                  : 'bg-white text-black'
+              key={m.id}
+              className={`w-full flex ${
+                m.role === 'user' ? 'justify-end' : 'justify-start'
               }`}
             >
-              <pre className='whitespace-pre-wrap text-sm'>{m.content}</pre>
+              <div
+                className={`max-w-[80%] px-3 py-2 rounded-2xl border ${
+                  m.role === 'user'
+                    ? 'bg-black text-white'
+                    : 'bg-white text-black'
+                }`}
+              >
+                <pre className='whitespace-pre-wrap text-sm'>{m.content}</pre>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      <form onSubmit={onSubmit} className='space-y-3'>
-        <div className='grid grid-cols-1 gap-3'>
-          <input
-            className='input'
-            type='url'
-            required
-            placeholder='https://example.com (required)'
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-          <textarea
-            className='input'
-            placeholder='Describe your testing scenario (optional)'
-            value={scenario}
-            onChange={(e) => setScenario(e.target.value)}
-          />
+          ))}
         </div>
-        <div className='flex items-center gap-3'>
-          <button className='btn' type='submit'>
-            {/* Generate & Run */} Generate
-          </button>
-          {/* <span className='text-sm opacity-70'>
+        <form onSubmit={onSubmit} className='space-y-3'>
+          <div className='grid grid-cols-1 gap-3'>
+            <input
+              className='input'
+              type='url'
+              required
+              placeholder='https://example.com (required)'
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+            />
+            <textarea
+              className='input relative'
+              placeholder='Describe your testing scenario (optional)'
+              value={scenario}
+              onChange={(e) => setScenario(e.target.value)}
+            >
+              {scenario}
+            </textarea>
+          </div>
+          <div className='flex items-center gap-3'>
+            <button className='btn' type='submit'>
+              {/* Generate & Run */} Generate
+            </button>
+            {/* <span className='text-sm opacity-70'>
             Mode: <strong>{mode}</strong> (toggle on the page)
           </span> */}
-        </div>
-      </form>
-    </div>
+          </div>
+        </form>
+        {loading && <div className='card'>Loading ...</div>}
+      </div>
+    </>
   );
 }
