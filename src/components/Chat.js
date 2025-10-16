@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { addMessage, setThreadId } from '@/store/chatSlice';
-import { setLoading, setOutput } from '@/store/testSlice';
+import { addMessage, setThreadId } from '../store/chatSlice';
+import { setLoading, setOutput } from '../store/testSlice';
 
 export default function Chat() {
   const dispatch = useDispatch();

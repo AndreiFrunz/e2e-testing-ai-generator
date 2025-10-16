@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import path from 'path';
 import { NextResponse } from 'next/server';
-import { extractPlaywrightFile, savePlaywrightTest } from '@/utils/file';
+import { extractPlaywrightFile, savePlaywrightTest } from '../../../utils/file';
 
 const backendPath = path.join(process.cwd(), '..', 'autogen', 'main.py');
 
