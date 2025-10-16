@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { addMessage, setThreadId } from '../store/chatSlice';
 import { setLoading, setOutput } from '../store/testSlice';
 
@@ -12,6 +12,21 @@ export default function Chat() {
 
   const [url, setUrl] = useState('');
   const [scenario, setScenario] = useState('');
+
+  const endRef = useRef(null);
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    const behavior = firstRender.current ? 'auto' : 'smooth';
+    requestAnimationFrame(() => {
+      endRef.current?.scrollIntoView({
+        behavior,
+        block: 'end',
+        inline: 'nearest',
+      });
+      firstRender.current = false;
+    });
+  }, [messages]);
 
   const onSubmit = async (e) => {
     let newMessage = scenario;
@@ -132,6 +147,7 @@ export default function Chat() {
               </div>
             </div>
           ))}
+          <div ref={endRef} />
         </div>
         <form onSubmit={onSubmit} className='space-y-3'>
           <div className='grid grid-cols-1 gap-3'>
