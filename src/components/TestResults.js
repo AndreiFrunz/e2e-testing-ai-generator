@@ -2,8 +2,7 @@
 import { useSelector } from 'react-redux';
 
 export default function TestResults() {
-  const { results, loading } = useSelector((s) => s.test);
-  if (loading) return <div className='card'>Loading ...</div>;
+  const { results } = useSelector((s) => s.test);
   if (!results) return null;
 
   return (

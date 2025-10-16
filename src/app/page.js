@@ -1,10 +1,10 @@
 'use client';
-import Chat from '@/components/Chat';
-import CodeOutput from '@/components/CodeOutput';
-import TestResults from '@/components/TestResults';
-import { StoreProvider } from '@/store';
+import Chat from '../components/Chat';
+import CodeOutput from '../components/CodeOutput';
+import TestResults from '../components/TestResults';
+import { StoreProvider } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMode } from '@/store/testSlice';
+import { setMode } from '../store/testSlice';
 
 function ModeToggle() {
   const dispatch = useDispatch();
@@ -34,8 +34,7 @@ export default function Page() {
           </h1>
           <p className='text-sm opacity-80 max-w-2xl'>
             Provide a webpage URL and a testing scenario. I will generate a
-            Playwright test using Azure AI Foundry (or mock), save it, execute
-            it, and show both the code and the results here.
+            Playwright test using Autogen Ai. You can run, edit and save it.
           </p>
           {/* <ModeToggle /> */}
         </section>
